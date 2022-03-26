@@ -165,43 +165,6 @@ class Test{
 		return encrypted;
 	}
 	
-	static void ParseADX(byte[] adx){
-		Dictionary<int, Dictionary<byte, int>> bytes = new Dictionary<int, Dictionary<byte, int>>();
-		
-		using(MemoryStream hcam = new MemoryStream(adx))
-		using(BinaryReader hcar = new BinaryReader(hcam)){
-			hcam.Seek(0x120, SeekOrigin.Begin);
-			int pos = 0;
-			byte b = hcar.ReadByte();
-			while(hcam.Length > hcam.Position){
-				int index = pos%16;
-				if(!bytes.ContainsKey(index)){
-					bytes.Add(index, new Dictionary<byte, int>());
-				}
-				if(!bytes[index].ContainsKey(b)){
-					bytes[index].Add(b, 1);
-				}else{
-					bytes[index][b]++;
-				}
-				pos++;
-				b = hcar.ReadByte();
-			}
-			foreach(var a in bytes){
-				var by = a.Value;
-				int max = 0;
-				byte maxb = 0x00;
-				foreach(var c in by){
-					if(c.Value > max){
-						max = c.Value;
-						maxb = c.Key;
-					}
-				}
-				Console.WriteLine(a.Key + ": " + BitConverter.ToString(new byte[1]{maxb}) + " - " + System.Text.Encoding.ASCII.GetString(new byte[1]{maxb}));
-			}
-			Console.WriteLine("Done");
-		}
-	}
-	
 	static void Main(string[] args){
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -215,11 +178,4 @@ class Test{
 		Console.WriteLine("Done!");
 		Console.ReadLine();
 	}
-}
-
-public class Versions{
-	public string GetAssemblyVersion()
-    {
-        return GetType().Assembly.GetName().Version.ToString();
-    }
 }
