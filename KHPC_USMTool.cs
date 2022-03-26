@@ -148,7 +148,9 @@ class Test{
 			Console.WriteLine("Found SFA count: " + count);
 			Console.WriteLine("Total audio length: " + totalLength);
 			Console.WriteLine("Output: " + output.Length);
-			File.WriteAllBytes("test.usm", output.ToArray());
+			
+			string outputFile = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f)) + "_edited" + Path.GetExtension(f);
+			File.WriteAllBytes(outputFile, output.ToArray());
 		}
 	}
 	
